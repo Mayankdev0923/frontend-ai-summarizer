@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Meeting Notes Summarizer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex justify-center p-6">
+  <div class="w-full max-w-3xl bg-white shadow-md rounded-xl p-6 space-y-6">
+    <h1 class="text-2xl font-bold text-gray-800 text-center">AI Meeting Notes Summarizer</h1>
+
+    <!-- Transcript Input -->
+    <div>
+      <label class="block font-semibold mb-2">Paste Transcript</label>
+      <textarea id="transcript" class="w-full border rounded-lg p-3" rows="6" placeholder="Paste meeting transcript here..."></textarea>
+    </div>
+
+    <!-- Prompt Input -->
+    <div>
+      <label class="block font-semibold mb-2">Custom Prompt</label>
+      <textarea id="prompt" class="w-full border rounded-lg p-3" rows="2" placeholder="E.g., Summarize in bullet points for executives"></textarea>
+    </div>
+
+    <!-- Generate Button -->
+    <button onclick="generateSummary()" class="w-full bg-blue-600 text-white rounded-lg py-3 font-semibold hover:bg-blue-700">
+      Generate Summary
+    </button>
+
+    <!-- Summary Output -->
+    <div>
+      <label class="block font-semibold mb-2">Generated Summary</label>
+      <textarea id="summary" class="w-full border rounded-lg p-3" rows="6" placeholder="Summary will appear here..."></textarea>
+    </div>
+
+    <!-- Email Sharing -->
+    <div>
+      <label class="block font-semibold mb-2">Share via Email</label>
+      <input id="emails" type="text" class="w-full border rounded-lg p-3 mb-3" placeholder="Enter email addresses, comma separated"/>
+      <button onclick="shareSummary()" class="w-full bg-green-600 text-white rounded-lg py-3 font-semibold hover:bg-green-700">
+        Share Summary
+      </button>
+    </div>
+  </div>
+
+  <script>
+    async function generateSummary() {
+      const transcript = document.getElementById("transcript").value;
+      const prompt = document.getElementById("prompt").value;
+
+      const res = await fetch("http://localhost:5000/api/summarize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ transcript, prompt })
+      });
+      const data = await res.json();
+      document.getElementById("summary").value = data.summary;
+    }
+
+    async function shareSummary() {
+      const summary = document.getElementById("summary").value;
+      const emails = document.getElementById("emails").value.split(",");
+
+      const res = await fetch("http://localhost:5000/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ summary, emails })
+      });
+      const data = await res.json();
+      alert(data.message);
+    }
+  </script>
+</body>
+</html>
