@@ -72,35 +72,35 @@
     </div>
 
     <script>
-  const API_BASE = "backend-ai-summarizer-production.up.railway.app"; // ✅ use http for local dev
+      const API_BASE =
+        "https://backend-ai-summarizer-production.up.railway.app"; // ✅ use http for local dev
 
-  async function generateSummary() {
-    const transcript = document.getElementById("transcript").value;
-    const prompt = document.getElementById("prompt").value;
+      async function generateSummary() {
+        const transcript = document.getElementById("transcript").value;
+        const prompt = document.getElementById("prompt").value;
 
-    const res = await fetch(`${API_BASE}/api/summarize`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ transcript, prompt }),
-    });
-    const data = await res.json();
-    document.getElementById("summary").value =
-      data.summary || data.error || "⚠️ No summary generated";
-  }
+        const res = await fetch(`${API_BASE}/api/summarize`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ transcript, prompt }),
+        });
+        const data = await res.json();
+        document.getElementById("summary").value =
+          data.summary || data.error || "⚠️ No summary generated";
+      }
 
-  async function shareSummary() {
-    const summary = document.getElementById("summary").value;
-    const emails = document.getElementById("emails").value.split(",");
+      async function shareSummary() {
+        const summary = document.getElementById("summary").value;
+        const emails = document.getElementById("emails").value.split(",");
 
-    const res = await fetch(`${API_BASE}/api/share`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ summary, emails }),
-    });
-    const data = await res.json();
-    alert(data.message || data.error || "⚠️ Something went wrong");
-  }
-</script>
-
+        const res = await fetch(`${API_BASE}/api/share`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ summary, emails }),
+        });
+        const data = await res.json();
+        alert(data.message || data.error || "⚠️ Something went wrong");
+      }
+    </script>
   </body>
 </html>
