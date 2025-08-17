@@ -44,30 +44,32 @@
   </div>
 
   <script>
+    const API_BASE = "https://wonderful-integrity.up.railway.app"; // your Railway backend URL
+
     async function generateSummary() {
       const transcript = document.getElementById("transcript").value;
       const prompt = document.getElementById("prompt").value;
 
-      const res = await fetch("http://localhost:5000/api/summarize", {
+      const res = await fetch(`${API_BASE}/api/summarize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ transcript, prompt })
       });
       const data = await res.json();
-      document.getElementById("summary").value = data.summary;
+      document.getElementById("summary").value = data.summary || "⚠️ No summary generated";
     }
 
     async function shareSummary() {
       const summary = document.getElementById("summary").value;
       const emails = document.getElementById("emails").value.split(",");
 
-      const res = await fetch("http://localhost:5000/api/share", {
+      const res = await fetch(`${API_BASE}/api/share`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ summary, emails })
       });
       const data = await res.json();
-      alert(data.message);
+      alert(data.message || "⚠️ Something went wrong");
     }
   </script>
 </body>
